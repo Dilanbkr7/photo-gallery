@@ -1,6 +1,7 @@
+
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Photo Gallery </ion-title>
+    <ion-title>Photo Gallery</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,8 +12,33 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-grid>
+    @if (photoService.photos().length === 0) {
+      <ion-row>
+        <ion-col size="12">
+          <p style="text-align: center; margin-top: 40px;">
+            Aún no hay fotos. Pulsa la cámara para tomar una.
+          </p>
+        </ion-col>
+      </ion-row>
+    }
+
+    <ion-row>
+      @for (photo of photoService.photos(); track photo.filepath) {
+        <ion-col size="6">
+          @if (photo.webviewPath) {
+            <img
+              [src]="photo.webviewPath"
+              alt="Foto guardada"
+              style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px;"
+            />
+          }
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <!-- CHANGE: Add a click event listener to the floating action button -->
     <ion-fab-button (click)="addPhotoToGallery()">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
