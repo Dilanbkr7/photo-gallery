@@ -1,46 +1,43 @@
-
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Photo Gallery</ion-title>
-  </ion-toolbar>
+<ion-header>
+  <ion-toolbar color="primary"><ion-title>Mi galería</ion-title></ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Photo Gallery</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content>
+  <section class="intro">
+    <span class="eyebrow">PHOTO GALLERY</span>
+    <h1>Tus momentos, contigo.</h1>
+    <p>Toma una foto y conserva tus recuerdos.</p>
+    <span class="count">{{ photoService.photos().length }} fotografías</span>
+  </section>
   <ion-grid>
     @if (photoService.photos().length === 0) {
-      <ion-row>
-        <ion-col size="12">
-          <p style="text-align: center; margin-top: 40px;">
-            Aún no hay fotos. Pulsa la cámara para tomar una.
-          </p>
-        </ion-col>
-      </ion-row>
+      <div class="empty">
+        <ion-icon name="camera" aria-hidden="true"></ion-icon>
+        <h2>{{ busy() ? 'Cargando tu galería…' : 'Tu primera foto empieza aquí' }}</h2>
+        <p>Pulsa el botón de la cámara para comenzar.</p>
+      </div>
     }
-
     <ion-row>
-      @for (photo of photoService.photos(); track photo.filepath) {
-        <ion-col size="6">
-          @if (photo.webviewPath) {
-            <img
-              [src]="photo.webviewPath"
-              alt="Foto guardada"
-              style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px;"
-            />
-          }
+      @for (photo of photoService.photos(); track photo.filepath; let i = $index) {
+        <ion-col size="6" size-md="4" size-lg="3">
+          <article class="photo">
+            @if (photo.webviewPath) {
+              <img [src]="photo.webviewPath" [alt]="'Fotografía ' + (i + 1)" loading="lazy" />
+            } @else { <p class="missing">Vista previa no disponible</p> }
+            <div class="photo-footer">
+              <span>Foto {{ photoService.photos().length - i }}</span>
+              <ion-button fill="clear" color="danger" [disabled]="busy()"
+                [attr.aria-label]="'Eliminar fotografía ' + (i + 1)" (click)="confirmDelete(photo)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </article>
         </ion-col>
       }
     </ion-row>
   </ion-grid>
-
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button (click)="addPhotoToGallery()">
-      <ion-icon name="camera"></ion-icon>
+    <ion-fab-button aria-label="Tomar fotografía" [disabled]="busy()" (click)="addPhotoToGallery()">
+      <ion-icon name="camera" aria-hidden="true"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
