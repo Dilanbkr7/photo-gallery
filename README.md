@@ -4,7 +4,7 @@
 
 # Photo Gallery
 
-**Captura tus momentos. Consérvalos. Organiza tu galería.**
+**APP GALLERY**
 
 Aplicación móvil desarrollada con Ionic Angular y Capacitor para tomar fotografías, guardarlas en Android y eliminarlas con confirmación.
 
